@@ -44,8 +44,5 @@ jobs:
         username: ${{ secrets.REMOTE_USERNAME }}
         script: |
           whoami
-              - name: Debug SSH Connection
-      run: |
-        echo "Running SSH Debug..."
-        ssh -vvv -i ~/.ssh/id_rsa ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_HOST }} whoami
+              
 
