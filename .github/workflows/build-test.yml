@@ -31,18 +31,25 @@ jobs:
     - name: List build directory contents
       run: ls -la build
 
-    - name: Setup SSH
+    - name: Setup SSH Key
       uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-    - name: Execute remote SSH commands
+    - name: Debug SSH Connection
+      run: |
+        echo "Running SSH Debug..."
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+        chmod 600 private_key.pem
+        ssh -vvv -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_HOST }} whoami
+
+    - name: Execute Remote SSH Commands
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.REMOTE_HOST }}
         username: ${{ secrets.REMOTE_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           whoami
-              
-
+          # Add any other remote commands you need to run here
