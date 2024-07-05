@@ -1,47 +1,45 @@
 pipeline {
-    agent any
+  agent any
+  environment {
+    DOCKERHUB_CREDENTIALS = credentials('autopilotsedate66-dockerhub')
+  }
+  stages {
+    stage('Clone Repository') {
+      steps {
+        // Clone your repository
+        checkout scm
+      }
+    }
+    stage('Build') {
+      steps {
+        dir('all_in_docker/client') {
+          script {
+            sh 'docker build -t autopilotsedate66/frontend:latest .'
+          }
+        }
+      }
+    }
+    // running the container
+    stage('Running container') {
+      steps {
+        sh 'docker run -d -p 80:80 autopilotsedate66/frontend'
+      }
+    }
     
-    tools {nodejs "node 14"}
-
-    // environment {
-    //     DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
-    // }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-        stage('Install Dependencies') {
-            steps {
-                dir('all_in_docker/client') {
-                script {
-                        sh 'npm install'
-                }
-            }
-            }
-        }
-        stage('Build') {
-            steps {
-                dir('all_in_docker/client') {
-                    script {
-                        sh 'CI=false npm run build'
-                    }
-                }
-            }
-        }
+    stage('Login') {
+      steps {
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+      }
     }
-
-    post {
-        always {
-            cleanWs() 
-        }
-        success {
-            echo 'Pipeline succeeded!'
-        }
-        failure {
-            echo 'Pipeline failed!'
-        }
+    stage('Push') {
+      steps {
+        sh 'docker push autopilotsedate66/frontend:latest'
+      }
     }
+  }
+  post {
+    always {
+      sh 'docker logout'
+    }
+  }
 }
