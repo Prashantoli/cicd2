@@ -75,7 +75,7 @@ function App() {
   return (
     <div className="App">
       <div className="information">
-        <label>What is your name of your mother:</label>
+        <label>NAME:</label>
         <input
           type="text"
           onChange={(event) => {
