@@ -55,6 +55,8 @@ jobs:
           ls
           cd cicd2
           cd all_in_docker
+          sudo apt update
+          sudo apt install docker-compose
           docker-compose build
           docker-compose up -d
           
