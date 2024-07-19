@@ -16,20 +16,20 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
+    # - name: Set up Node.js
+    #   uses: actions/setup-node@v3
+    #   with:
+    #     node-version: '16'
 
-    - name: Install Dependencies
-      run: npm install
+    # - name: Install Dependencies
+    #   run: npm install
 
-    - name: Build Application
-      run: |
-        CI=false npm run build
+    # - name: Build Application
+    #   run: |
+    #     CI=false npm run build
 
-    - name: List build directory contents
-      run: ls -la build
+    # - name: List build directory contents
+    #   run: ls -la build
 
     - name: Setup SSH Key
       uses: shimataro/ssh-key-action@v2
@@ -52,4 +52,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           whoami
+          docker-compose build
+          docker-compose up -d
+          
           # Add any other remote commands you need to run here
