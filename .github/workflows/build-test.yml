@@ -57,7 +57,7 @@ jobs:
           cd all_in_docker
           sudo apt update
           sudo apt install docker-compose
-          docker-compose build
-          docker-compose up -d
+          sudo docker-compose build
+          sudo docker-compose up -d
           
           # Add any other remote commands you need to run here
