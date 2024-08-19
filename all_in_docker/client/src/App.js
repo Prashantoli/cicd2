@@ -82,7 +82,7 @@ function App() {
             setName(event.target.value);
           }}
         />
-        <label>what should be your age :</label>
+        <label>what is your age :</label>
         <input
           type="number"
           onChange={(event) => {
